@@ -1,0 +1,16 @@
+# Home Assistant runtime data
+*.db
+*.log
+.cloud/
+.storage/
+.uuid
+.homekit.state
+tts/
+
+# Home Assistant Secrets
+secrets.yaml
+
+# OS / editor
+__pycache__/
+*.pyc
+.DS_Store
