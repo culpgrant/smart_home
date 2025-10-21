@@ -6,9 +6,14 @@
 .uuid
 .homekit.state
 tts/
+config/*.lock
+home-assistant.log*
+*.db*
 
 # Home Assistant Secrets
+ip_bans.yaml
 secrets.yaml
+known_devices.yaml
 
 # OS / editor
 __pycache__/

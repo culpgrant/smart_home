@@ -14,3 +14,19 @@ To be written
 
 ### Setup Instructions
 - Create a bootable USB with linux OS on it. [Help Document]('https://ubuntu.com/tutorials/create-a-usb-stick-on-macos#1-overview')
+- Setup computer for development
+    - [uv](https://docs.astral.sh/uv/getting-started/installation/)
+    - git
+        - `sudo apt install git`
+    - vscode
+        - Ubuntu App Center
+    - ssh
+        - Need to also secure SSH logins. Please do own research
+        - `/etc/ssh/sshd_config`
+        - fail2ban
+- [Install Docker](https://docs.docker.com/engine/install/ubuntu/) (Docker Desktop optional)
+
+
+### TODO:
+- Build and publish python package for home server
+- Build monitoring solution for the SSH login attempts
