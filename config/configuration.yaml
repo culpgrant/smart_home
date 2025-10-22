@@ -9,3 +9,8 @@ frontend:
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+
+sensor:
+  - platform: comed_hourly_pricing
+    monitored_feeds:
+      - type: current_hour_average
