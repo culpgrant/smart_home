@@ -1,0 +1,13 @@
+[project]
+name = "smart-home"
+version = "0.1.0"
+description = "Add your description here"
+authors = ["Grant Culp <culpgrant21@gmail.com>"]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+]
