@@ -27,6 +27,18 @@ To be written
 - [Install Docker](https://docs.docker.com/engine/install/ubuntu/) (Docker Desktop optional)
 
 
+### How to update Home Assitant
+- Ensure automated backup was taken
+- `docker ps`
+- `docker stop (contianer_id from above)`
+- Update `docker-compose.yml` image with the correct version
+- `docker compose up -d`
+- To confirm the version:
+- `docker exec -it (container_id) bash`
+- `hass --version`
+- `exit`
+
+
 ### TODO:
 - Build and publish python package for home server
 - Build monitoring solution for the SSH login attempts

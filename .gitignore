@@ -9,6 +9,8 @@ tts/
 config/*.lock
 home-assistant.log*
 *.db*
+# Home Assistant Backups
+/config/backups/
 
 # Home Assistant Secrets
 ip_bans.yaml
