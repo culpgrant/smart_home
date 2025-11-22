@@ -1,12 +1,11 @@
 To be written
 
 ### To Do List
-- Hookup Thermostat
-- Download Home Assistant in the car
 - Setup Equinox EV in the home assitant
 - Buy the hookup for the garage door
 - Water Sensor for rain gage (other outdoor climate) stuff
 - announcement in bathroom when i am home
+- get Frigate running on the reolink feed. save events for n days. long term - integrate it more into a security system. turn on lights when a person is detected after a certain time. 
 
 ### Stack
 - Computer/Server: [Beelink Mini S13]('https://www.amazon.com/dp/B0BW8JSQCH')
