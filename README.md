@@ -40,5 +40,6 @@ To be written
 
 
 ### TODO:
+- get frigate running
 - Build and publish python package for home server
 - Build monitoring solution for the SSH login attempts
