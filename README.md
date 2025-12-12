@@ -5,8 +5,8 @@ To be written
 - Buy the hookup for the garage door
 - Water Sensor for rain gage (other outdoor climate) stuff
 - announcement in bathroom when i am home
-- get Frigate running on the reolink feed. save events for n days. long term - integrate it more into a security system. turn on lights when a person is detected after a certain time. 
-- get an external harddive for saving the recordings. 
+- get Frigate running on the reolink feed. save events for n days. long term - integrate it more into a security system. turn on lights when a person is detected after a certain time.
+- get an external harddive for saving the recordings.
 ### Stack
 - Computer/Server: [Beelink Mini S13]('https://www.amazon.com/dp/B0BW8JSQCH')
 - Operating System: Ubuntu
@@ -42,3 +42,7 @@ To be written
 ### TODO:
 - Build and publish python package for home server
 - Build monitoring solution for the SSH login attempts
+- Reolink documentation (Mac client, https://10.0.0.202/#/network)
+- Build an internal python library for this
+    - Build the Q101 playlist generator
+- How I am running matter - http://localhost:5580/
