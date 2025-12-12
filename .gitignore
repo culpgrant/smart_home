@@ -21,3 +21,6 @@ known_devices.yaml
 __pycache__/
 *.pyc
 .DS_Store
+
+# Matter server
+matter_server_data/

@@ -1,1 +1,174 @@
-[]
+- id: '1764967266200'
+  alias: Weekday - Christmas Lights - On
+  description: Turn on christmas lights at 3 pm during the week
+  triggers:
+  - trigger: time
+    at: '15:00:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    id: Weekday at 3 pm
+  conditions:
+  - condition: or
+    conditions:
+    - condition: device
+      type: is_off
+      device_id: 02d8481285f1f84f07d7267efade400f
+      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      domain: switch
+    - condition: device
+      type: is_off
+      device_id: 5ce9b903edc2cee333e0027bcafde879
+      entity_id: 84de7b32474964ce6255d162ecf985a6
+      domain: switch
+    - condition: device
+      type: is_off
+      device_id: e4496a103b373de1fe42c7ecc5237e88
+      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      domain: switch
+  actions:
+  - type: turn_on
+    device_id: 02d8481285f1f84f07d7267efade400f
+    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    domain: switch
+  - type: turn_on
+    device_id: 5ce9b903edc2cee333e0027bcafde879
+    entity_id: 84de7b32474964ce6255d162ecf985a6
+    domain: switch
+  - type: turn_on
+    device_id: e4496a103b373de1fe42c7ecc5237e88
+    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    domain: switch
+  mode: single
+- id: '1764967514183'
+  alias: Weekend - Christmas Lights - On
+  description: Turn on christmas lights at 9 am weekend
+  triggers:
+  - trigger: time
+    at: 09:00:00
+    id: Weekend at 9 am
+    weekday:
+    - sun
+    - sat
+  conditions:
+  - condition: or
+    conditions:
+    - condition: device
+      type: is_off
+      device_id: 02d8481285f1f84f07d7267efade400f
+      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      domain: switch
+    - condition: device
+      type: is_off
+      device_id: 5ce9b903edc2cee333e0027bcafde879
+      entity_id: 84de7b32474964ce6255d162ecf985a6
+      domain: switch
+    - condition: device
+      type: is_off
+      device_id: e4496a103b373de1fe42c7ecc5237e88
+      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      domain: switch
+  actions:
+  - type: turn_on
+    device_id: 02d8481285f1f84f07d7267efade400f
+    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    domain: switch
+  - type: turn_on
+    device_id: 5ce9b903edc2cee333e0027bcafde879
+    entity_id: 84de7b32474964ce6255d162ecf985a6
+    domain: switch
+  - type: turn_on
+    device_id: e4496a103b373de1fe42c7ecc5237e88
+    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    domain: switch
+  mode: single
+- id: '1764967739218'
+  alias: Weekday - Christmas Lights - Off
+  description: Turn off Christmas lights at 10 pm during the week
+  triggers:
+  - trigger: time
+    at: '22:00:00'
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    id: Weekday at 10 pm
+  conditions:
+  - condition: or
+    conditions:
+    - condition: device
+      type: is_on
+      device_id: 02d8481285f1f84f07d7267efade400f
+      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      domain: switch
+    - condition: device
+      type: is_on
+      device_id: 5ce9b903edc2cee333e0027bcafde879
+      entity_id: 84de7b32474964ce6255d162ecf985a6
+      domain: switch
+    - condition: device
+      type: is_on
+      device_id: e4496a103b373de1fe42c7ecc5237e88
+      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      domain: switch
+  actions:
+  - type: turn_off
+    device_id: 02d8481285f1f84f07d7267efade400f
+    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    domain: switch
+  - type: turn_off
+    device_id: 5ce9b903edc2cee333e0027bcafde879
+    entity_id: 84de7b32474964ce6255d162ecf985a6
+    domain: switch
+  - type: turn_off
+    device_id: e4496a103b373de1fe42c7ecc5237e88
+    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    domain: switch
+  mode: single
+- id: '1764967811432'
+  alias: Weekend - Christmas Lights - Off
+  description: Turn off Christmas lights at 11 pm during the weekend
+  triggers:
+  - trigger: time
+    at: '23:00:00'
+    id: Weekend at 11 pm
+    weekday:
+    - sun
+    - sat
+  conditions:
+  - condition: or
+    conditions:
+    - condition: device
+      type: is_on
+      device_id: 02d8481285f1f84f07d7267efade400f
+      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      domain: switch
+    - condition: device
+      type: is_on
+      device_id: 5ce9b903edc2cee333e0027bcafde879
+      entity_id: 84de7b32474964ce6255d162ecf985a6
+      domain: switch
+    - condition: device
+      type: is_on
+      device_id: e4496a103b373de1fe42c7ecc5237e88
+      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      domain: switch
+  actions:
+  - type: turn_off
+    device_id: 02d8481285f1f84f07d7267efade400f
+    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    domain: switch
+  - type: turn_off
+    device_id: 5ce9b903edc2cee333e0027bcafde879
+    entity_id: 84de7b32474964ce6255d162ecf985a6
+    domain: switch
+  - type: turn_off
+    device_id: e4496a103b373de1fe42c7ecc5237e88
+    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    domain: switch
+  mode: single
