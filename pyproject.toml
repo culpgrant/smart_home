@@ -2,12 +2,45 @@
 name = "smart-home"
 version = "0.1.0"
 description = "Add your description here"
-authors = ["Grant Culp <culpgrant21@gmail.com>"]
+authors = [{name = "Grant Culp", email = "culpgrant21@gmail.com"},]
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+]
 
 [dependency-groups]
 dev = [
     "pre-commit>=4.3.0",
+    "ruff>=0.14.9",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+managed = true
+
+[tool.ruff]
+select = [
+    "E",  # Error (pycodestyle errors)
+    "W",  # Warning (pycodestyle warnings)
+    "F",  # Pyflakes
+    "I",  # isort (for import sorting)
+    "B",  # Bugbear (for common bug patterns)
+    "C4", # flake8-comprehensions
+    "TID", # flake8-tidy-imports
+    "ISC", # flake8-implicit-str-concat
+    "N", # Naming conventions (optional, but good)
+    "UP", # PYupgrade
+    "PT" # pytest
+]
+
+exclude = [
+    ".git",
+    "__pycache__",
+    "venv",
+    "build",
+    "dist",
 ]
