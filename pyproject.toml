@@ -13,6 +13,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pre-commit>=4.3.0",
+    "pytest>=9.0.2",
     "ruff>=0.14.9",
 ]
 
@@ -23,19 +24,23 @@ where = ["src"]
 managed = true
 
 [tool.ruff]
-select = [
+extend-select = [
     "E",  # Error (pycodestyle errors)
     "W",  # Warning (pycodestyle warnings)
     "F",  # Pyflakes
     "I",  # isort (for import sorting)
     "B",  # Bugbear (for common bug patterns)
+    "D", # Docstrings
+    "ANN", # Type Annotations
     "C4", # flake8-comprehensions
     "TID", # flake8-tidy-imports
     "ISC", # flake8-implicit-str-concat
-    "N", # Naming conventions (optional, but good)
+    "N", # Naming conventions
     "UP", # PYupgrade
-    "PT" # pytest
+    "PT", # pytest
+    "DOC" # Docstring
 ]
+preview = true
 
 exclude = [
     ".git",
@@ -44,3 +49,11 @@ exclude = [
     "build",
     "dist",
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.per-file-ignores]
+# Ignore docstring rules (D) and possibly long line rules (E501)
+# for everything inside the tests/ directory.
+"tests/*.py" = ["D", "E501", "ANN201"]
