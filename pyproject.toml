@@ -14,6 +14,7 @@ dependencies = [
 dev = [
     "pre-commit>=4.3.0",
     "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
     "ruff>=0.14.9",
 ]
 
@@ -40,6 +41,10 @@ extend-select = [
     "PT", # pytest
     "DOC" # Docstring
 ]
+extend-ignore = [
+    "D212", # Docstring multiline use the first line
+    "D205" # Blank line between summary line and detail line
+]
 preview = true
 
 exclude = [
@@ -57,3 +62,6 @@ convention = "google"
 # Ignore docstring rules (D) and possibly long line rules (E501)
 # for everything inside the tests/ directory.
 "tests/*.py" = ["D", "E501", "ANN201"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
