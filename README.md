@@ -41,6 +41,7 @@ To be written
 
 ### TODO:
 - get frigate running
+- Code Coverage
 - Build and publish python package for home server
 - Build monitoring solution for the SSH login attempts
 - Reolink documentation (Mac client, https://10.0.0.202/#/network)

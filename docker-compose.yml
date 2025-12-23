@@ -24,3 +24,20 @@ services:
     # privileged: true
     # devices:
     #   - /dev/ttyUSB1:/dev/ttyUSB1
+
+  # Adguard
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: unless-stopped
+    volumes:
+      - ./adguard/work:/opt/adguardhome/work
+      - ./adguard/conf:/opt/adguardhome/conf
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "3000:80"   # host 3000 → container 80 Web UI - http://192.168.1.20:3000 (host machine IP Address)
+      - "853:853/tcp" # DNS over TLS (optional)
+      - "784:784/tcp" # DNS over HTTPS (optional)
+    environment:
+      - TZ=America/Chicago
