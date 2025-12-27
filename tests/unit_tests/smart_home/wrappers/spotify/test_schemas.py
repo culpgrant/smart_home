@@ -3,9 +3,6 @@ from pydantic import ValidationError
 
 from smart_home.wrappers.spotify.schemas import (
     SpotifyBaseModel,
-    SpotifyCreatePlaylist,
-    SpotifyPlaylist,
-    SpotifyUser,
 )
 
 
@@ -15,7 +12,7 @@ class _TestModel(SpotifyBaseModel):
 
 
 def test_base_model():
-    test = _TestModel(name="", count=1, extra_field="as")
+    test = _TestModel(name="", count=1, extra_field="as")  # pyright: ignore[reportCallIssue]
     assert test.name is None
     assert test.count == 1
     assert not hasattr(test, "extra_field")
