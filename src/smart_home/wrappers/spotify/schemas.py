@@ -1,27 +1,32 @@
+"""Pydantic models for Spotify."""
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-
-# Move to pyantic handler
-def _normalize_empty_string(value: Any) -> Any:
-    if value == "":
-        return None
-    if isinstance(value, dict):
-        return {k: _normalize_empty_string(v) for k, v in value.items()}
-    return value
+from smart_home.wrappers.pydantic.pydantic import normalize_empty_string
 
 
 class SpotifyBaseModel(BaseModel):
+    """Base Model for all Spotify Data Attributes."""
     model_config = ConfigDict(extra="ignore", populate_by_name=True, frozen=True)
 
     @model_validator(mode="before")
     @classmethod
-    def normalize_empty_strings(cls, data: Any) -> Any:
-        return _normalize_empty_string(data)
+    def _normalize_empty_strings(cls, data: Any) -> Any:
+        """
+        Normalize empty strings.
+
+        Arguments:
+            data: Any - Data to normalize
+
+        Returns:
+            Normalized data
+        """
+        return normalize_empty_string(data)
 
 
 class SpotifyUser(SpotifyBaseModel):
+    """Spotify User Data Model."""
     id: str = Field(description="The Spotify user ID")
     display_name: str | None = Field(description="User Name displayed in the app")
     external_urls: dict[str, str] | None = Field(
@@ -37,6 +42,7 @@ class SpotifyUser(SpotifyBaseModel):
 
 
 class SpotifyPlaylist(SpotifyBaseModel):
+    """Spotify Playlist Model, returning data from Spotify."""
     id: str = Field(description="Paylist ID")
     name: str = Field(description="Name of the playlist")
     href: str = Field(description="API URL to playlist")
@@ -61,6 +67,7 @@ class SpotifyPlaylist(SpotifyBaseModel):
 
 
 class SpotifyCreatePlaylist(SpotifyBaseModel):
+    """Spotify Playlist Model to create playlists."""
     name: str = Field(description="Name for the playlist")
     description: str = Field(
         description="Description to give the playlist",

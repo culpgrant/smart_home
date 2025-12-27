@@ -100,6 +100,7 @@ async def test_auth_authorization_call_refresh_token(
     assert result == {"code": "fake_return_code"}
 
 
+@patch.dict("os.environ", {"SPOTIFY_REFRESH_TOKEN": "fake_token"})
 @patch("smart_home.wrappers.spotify.spotify.time.time")
 @patch.object(SpotifyAuth, "_authorization_call", new_callable=AsyncMock)
 async def test__refresh_access_token_success(
@@ -119,6 +120,7 @@ async def test__refresh_access_token_success(
     assert fake_wrapper.access_token_expires_at == 3700
 
 
+@patch.dict("os.environ", {"SPOTIFY_REFRESH_TOKEN": "fake_token"})
 @patch.object(SpotifyAuth, "_authorization_call", new_callable=AsyncMock)
 async def test__refresh_access_token_failed(mock_authorization_call: AsyncMock):
     mock_authorization_call.return_value = {"unexpected_return": "unexpected_return"}
