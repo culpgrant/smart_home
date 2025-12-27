@@ -43,7 +43,8 @@ extend-select = [
 ]
 extend-ignore = [
     "D212", # Docstring multiline use the first line
-    "D205" # Blank line between summary line and detail line
+    "D205", # Blank line between summary line and detail line
+    "ANN401" # Any type
 ]
 preview = true
 
