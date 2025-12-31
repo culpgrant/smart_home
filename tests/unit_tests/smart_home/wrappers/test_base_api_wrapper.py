@@ -68,7 +68,9 @@ async def test__request_success(mock_httpx: AsyncMock):
 
     result = await api_instance._request(method="GET", path="home")  # type: ignore
 
-    mock_httpx.assert_called_once_with(base_url="https://test.com", timeout=10.0)
+    mock_httpx.assert_called_once_with(
+        base_url="https://test.com", timeout=10.0, follow_redirects=False
+    )
 
     mock_httpx().request.assert_called_once_with(
         "GET",
@@ -78,7 +80,8 @@ async def test__request_success(mock_httpx: AsyncMock):
         json=None,
         data=None,
     )
-    assert result == {"a": "b"}
+    assert result.status_code == 200
+    assert result.json() == {"a": "b"}
 
 
 @pytest.mark.asyncio
@@ -99,7 +102,9 @@ async def test__request_fail(mock_httpx: AsyncMock):
 
     assert exc.value.response.status_code == 404
 
-    mock_httpx.assert_called_once_with(base_url="https://test.com", timeout=10.0)
+    mock_httpx.assert_called_once_with(
+        base_url="https://test.com", timeout=10.0, follow_redirects=False
+    )
 
     mock_httpx().request.assert_called_once_with(
         "GET",
@@ -113,8 +118,20 @@ async def test__request_fail(mock_httpx: AsyncMock):
 
 @patch.object(BaseAPI, "_request")
 async def test_get(mock_request: AsyncMock, fake_base_api: BaseAPI):
-    await fake_base_api.get("home")
+    mock_request.return_value = create_mock_response(status_code=200)
+    result = await fake_base_api.get("home")
     mock_request.assert_called_once_with("GET", "home")
+    assert isinstance(result, dict)
+    assert result == {"a": "b"}
+
+
+@patch.object(BaseAPI, "_request")
+async def test_get_text(mock_request: AsyncMock, fake_base_api: BaseAPI):
+    mock_request.return_value = create_mock_response(status_code=200)
+    result = await fake_base_api.get_text("home")
+    mock_request.assert_called_once_with("GET", "home")
+    assert isinstance(result, str)
+    assert result == '{"a": "b"}'
 
 
 @patch.object(BaseAPI, "_request")
@@ -145,6 +162,8 @@ async def test_close(mock_httpx: AsyncMock):
 
     await api_instance.close()
 
-    mock_httpx.assert_called_once_with(base_url="https://test.com", timeout=10.0)
+    mock_httpx.assert_called_once_with(
+        base_url="https://test.com", timeout=10.0, follow_redirects=False
+    )
 
     mock_httpx().aclose.assert_called_once()
