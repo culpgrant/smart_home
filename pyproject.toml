@@ -26,7 +26,7 @@ where = ["src"]
 managed = true
 
 [tool.ruff]
-extend-select = [
+lint.extend-select = [
     "E",  # Error (pycodestyle errors)
     "W",  # Warning (pycodestyle warnings)
     "F",  # Pyflakes
@@ -42,7 +42,7 @@ extend-select = [
     "PT", # pytest
     "DOC" # Docstring
 ]
-extend-ignore = [
+lint.extend-ignore = [
     "D212", # Docstring multiline use the first line
     "D205", # Blank line between summary line and detail line
     "ANN401" # Any type
@@ -60,7 +60,7 @@ exclude = [
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 # Ignore docstring rules (D) and possibly long line rules (E501)
 # for everything inside the tests/ directory.
 "tests/*.py" = ["D", "E501", "ANN201"]
