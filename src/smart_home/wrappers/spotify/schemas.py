@@ -4,7 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from smart_home.wrappers.pydantic.pydantic import normalize_empty_string
+from smart_home.wrappers.pydantic import normalize_empty_string
 
 
 class SpotifyBaseModel(BaseModel):
@@ -84,3 +84,20 @@ class SpotifyCreatePlaylist(SpotifyBaseModel):
     collaborative: bool = Field(
         description="Allow other people to edit playlist", default=False
     )
+
+
+class SpotifyTrack(SpotifyBaseModel):
+    """Spotify Track Pydantic Model."""
+
+    id: str = Field(description="Spotify Track ID")
+    name: str = Field(description="Track Name")
+    uri: str = Field(description="API path")
+    disc_number: int = Field(description="Disc Number")
+    duration_ms: int = Field(description="Length of track in miliseconds")
+    explicit: bool = Field(description="Is track explicit")
+    href: str = Field(description="API URL")
+    is_playable: bool = Field(description="Can track be played")
+    popularity: int = Field(description="Spotify ranking of popularity of track")
+    type: str = Field(description="Track")
+    track_number: int = Field(description="Track Number on the album")
+    is_local: bool = Field(description="Is track local to current user")
