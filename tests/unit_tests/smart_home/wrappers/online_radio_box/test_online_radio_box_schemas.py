@@ -1,4 +1,4 @@
-from smart_home.wrappers.online_radio_box.schemas import Song
+from smart_home.wrappers.online_radio_box.online_radio_box_schemas import Song
 
 
 def test_song():

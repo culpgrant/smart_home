@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from smart_home.wrappers.spotify.schemas import (
+from smart_home.wrappers.spotify.spotify_schemas import (
     SpotifyBaseModel,
 )
 
