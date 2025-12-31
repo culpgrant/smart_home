@@ -14,6 +14,7 @@ class BaseAPI(ABC):
         base_url: str,
         *,
         timeout: float = 10.0,
+        follow_redirects: bool = False,
     ) -> None:
         """
         Initialize Base API.
@@ -22,11 +23,12 @@ class BaseAPI(ABC):
             base_url (str): Base URL to use for all API calls
             timeout (float, optional): Seconds to wait till timing out the call.
                 Defaults to 10.0.
+            follow_redirects (bool, optional): Allow the url to redirect.
+                Defaults to False.
         """
         self.base_url = base_url.rstrip("/")
         self._client = httpx.AsyncClient(
-            base_url=self.base_url,
-            timeout=timeout,
+            base_url=self.base_url, timeout=timeout, follow_redirects=follow_redirects
         )
 
     @abstractmethod
@@ -51,7 +53,7 @@ class BaseAPI(ABC):
         json: dict[str, Any] | None = None,
         headers: dict[str, Any] | None = None,
         data: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
+    ) -> httpx.Response:
         """
         Helper _request method that all calls leverage.
 
@@ -64,7 +66,7 @@ class BaseAPI(ABC):
             data (dict[str, Any] | None, optional): Data. Defaults to None.
 
         Returns:
-            dict[str, Any]: JSON from result of the call
+            httpx.Response: Response object
         """
         headers = headers or await self._headers()
         response = await self._client.request(
@@ -75,11 +77,10 @@ class BaseAPI(ABC):
             json=json,
             data=data,
         )
-
         if response.is_error:
             self.raise_for_status_with_json(response)
 
-        return response.json()
+        return response
 
     def raise_for_status_with_json(self, response: httpx.Response) -> httpx.Response:
         """
@@ -118,7 +119,22 @@ class BaseAPI(ABC):
         Returns:
             dict[str, Any]: JSON response
         """
-        return await self._request("GET", path, **kwargs)
+        response = await self._request("GET", path, **kwargs)
+        return response.json()
+
+    async def get_text(self, path: str, **kwargs: dict[str, Any]) -> str:
+        """
+        GET call, return text.
+
+        Args:
+            path (str): URL Path
+            **kwargs(dict): kwargs
+
+        Returns:
+            str: string response
+        """
+        response = await self._request("GET", path, **kwargs)
+        return response.text
 
     async def post(self, path: str, **kwargs: dict[str, Any]) -> dict[str, Any]:
         """
@@ -131,7 +147,8 @@ class BaseAPI(ABC):
         Returns:
             dict[str, Any]: JSON response
         """
-        return await self._request("POST", path, **kwargs)
+        response = await self._request("POST", path, **kwargs)
+        return response.json()
 
     async def put(self, path: str, **kwargs: dict[str, Any]) -> dict[str, Any]:
         """
@@ -144,7 +161,8 @@ class BaseAPI(ABC):
         Returns:
             dict[str, Any]: JSON response
         """
-        return await self._request("PUT", path, **kwargs)
+        response = await self._request("PUT", path, **kwargs)
+        return response.json()
 
     async def delete(self, path: str, **kwargs: dict[str, Any]) -> dict[str, Any]:
         """
@@ -157,7 +175,8 @@ class BaseAPI(ABC):
         Returns:
             dict[str, Any]: JSON response
         """
-        return await self._request("DELETE", path, **kwargs)
+        response = await self._request("DELETE", path, **kwargs)
+        return response.json()
 
     async def close(self) -> None:
         """Close HTTPX Client."""
