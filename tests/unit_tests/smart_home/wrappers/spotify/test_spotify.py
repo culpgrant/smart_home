@@ -4,12 +4,13 @@ from unittest.mock import AsyncMock, MagicMock, PropertyMock, patch
 
 import pytest
 
-from smart_home.wrappers.spotify.schemas import (
+from smart_home.wrappers.spotify.spotify import BaseAPI, SpotifyAuth, SpotifyWrapper
+from smart_home.wrappers.spotify.spotify_schemas import (
     SpotifyCreatePlaylist,
     SpotifyPlaylist,
+    SpotifyTrack,
     SpotifyUser,
 )
-from smart_home.wrappers.spotify.spotify import BaseAPI, SpotifyAuth, SpotifyWrapper
 
 
 @pytest.fixture
@@ -243,6 +244,27 @@ def fake_playlist() -> SpotifyPlaylist:
     )
 
 
+# TODO: Remove all pydantic.model_construct
+
+
+@pytest.fixture
+def fake_track() -> SpotifyTrack:
+    return SpotifyTrack(
+        id="asdfjasdfklj",
+        name="spotify_track",
+        uri="Spotify:Track:asdfjasdfklj",
+        disc_number=3,
+        duration_ms=96876,
+        explicit=False,
+        href="https:link",
+        is_playable=True,
+        popularity=45,
+        type="track",
+        track_number=4,
+        is_local=True,
+    )
+
+
 async def fake_empty_gen(self: SpotifyWrapper) -> AsyncGenerator[None]:
     if False:
         yield
@@ -423,3 +445,131 @@ async def test_find_playlist_by_name_not_found(fake_wrapper: SpotifyWrapper):
     result = await fake_wrapper.find_playlist_by_name(name="fake_playlist")
 
     assert result is None
+
+
+@patch.object(BaseAPI, "get")
+async def test_search_track(
+    mock_get: AsyncMock, fake_track: SpotifyTrack, fake_wrapper: SpotifyWrapper
+):
+    fake_track_data = fake_track.model_dump()
+    mock_get.return_value = {
+        "tracks": {
+            "href": "https://api.spotify.com/v1/search?offset=0&limit=1&query=track%3ALawyers%2C%20Guns%20and%20Money%20artist%3AWarren%20and%20Zevon&type=track&market=US",
+            "limit": 1,
+            "next": "https://api.spotify.com/v1/search?offset=1&limit=1&query=track%3ALawyers%2C%20Guns%20and%20Money%20artist%3AWarren%20and%20Zevon&type=track&market=US",
+            "offset": 0,
+            "previous": None,
+            "total": 17,
+            "items": [fake_track_data],
+        }
+    }
+    result = await fake_wrapper.search_track(title="song title", artist="song artist")
+
+    mock_get.assert_called_once_with(
+        "search",
+        params={
+            "q": "track:song title artist:song artist",
+            "type": "track",
+            "market": "US",
+            "limit": 1,
+            "offset": 0,
+        },
+    )
+    assert result == fake_track
+
+
+@patch.object(BaseAPI, "get")
+async def test_search_track_no_results(
+    mock_get: AsyncMock, fake_wrapper: SpotifyWrapper
+):
+    mock_get.return_value = {
+        "tracks": {
+            "href": "https://api.spotify.com/v1/search?offset=0&limit=1&query=track%3ALawyers%2C%20Guns%20and%20Money%20artist%3AWarren%20and%20Zevon&type=track&market=US",
+            "limit": 1,
+            "next": "https://api.spotify.com/v1/search?offset=1&limit=1&query=track%3ALawyers%2C%20Guns%20and%20Money%20artist%3AWarren%20and%20Zevon&type=track&market=US",
+            "offset": 0,
+            "previous": None,
+            "total": 17,
+            "items": [],
+        }
+    }
+    result = await fake_wrapper.search_track(title="song title", artist="song artist")
+
+    mock_get.assert_called_once_with(
+        "search",
+        params={
+            "q": "track:song title artist:song artist",
+            "type": "track",
+            "market": "US",
+            "limit": 1,
+            "offset": 0,
+        },
+    )
+    assert result is None
+
+
+@patch("smart_home.wrappers.spotify.spotify.chunk_list")
+@patch.object(BaseAPI, "post")
+async def test_add_song_to_playlist(
+    mock_post: AsyncMock, mock_chunk_list: MagicMock, fake_wrapper: SpotifyWrapper
+):
+    mock_chunk_list.return_value = [
+        ["track_1", "track_2"],
+        ["track_3", "track_4"],
+        ["track_5", "track_6"],
+    ]
+    mock_post.side_effect = [
+        {"snapshot_id": "abc"},
+        {"snapshot_id": "abc1"},
+        {"snapshot_id": "abc2"},
+    ]
+
+    result = await fake_wrapper.add_song_to_playlist(
+        playlist_id="asda", track_uri=["fake_tracks"]
+    )
+
+    assert result == [
+        {"snapshot_id": "abc"},
+        {"snapshot_id": "abc1"},
+        {"snapshot_id": "abc2"},
+    ]
+    mock_chunk_list.assert_called_once_with(["fake_tracks"], size=100)
+    assert mock_post.call_count == 3
+    mock_post.assert_called_with(
+        path="playlists/asda/tracks",
+        json={
+            "uris": ["track_5", "track_6"],
+        },
+    )
+
+
+@patch.object(BaseAPI, "post")
+async def test_add_song_to_playlist_one_song(
+    mock_post: AsyncMock, fake_wrapper: SpotifyWrapper
+):
+    mock_post.return_value = {"snapshot_id": "abc"}
+
+    result = await fake_wrapper.add_song_to_playlist(
+        playlist_id="asda", track_uri="fake_track"
+    )
+
+    assert result == [
+        {"snapshot_id": "abc"},
+    ]
+    assert mock_post.call_count == 1
+    mock_post.assert_called_with(
+        path="playlists/asda/tracks",
+        json={
+            "uris": ["fake_track"],
+        },
+    )
+
+
+@patch.object(BaseAPI, "put")
+async def test_clear_playlist_tracks(mock_put: AsyncMock, fake_wrapper: SpotifyWrapper):
+    mock_put.return_value = {"snapshot_id": "abc"}
+
+    result = await fake_wrapper.clear_playlist_tracks(playlist_id="asdfas")
+
+    assert result == {"snapshot_id": "abc"}
+    mock_put.assert_called_once_with(path="playlists/asdfas/tracks", json={"uris": []})

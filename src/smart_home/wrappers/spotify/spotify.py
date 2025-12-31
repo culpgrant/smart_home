@@ -9,9 +9,10 @@ from functools import cached_property
 from typing import Any, Literal
 from urllib import parse
 
+from smart_home.utils.iter_utils import chunk_list
 from smart_home.utils.logging import get_logger
 from smart_home.wrappers.base_api_wrapper import BaseAPI
-from smart_home.wrappers.spotify import schemas
+from smart_home.wrappers.spotify import spotify_schemas
 
 DEFAULT_SCOPES = ["playlist-modify-public"]
 log = get_logger()
@@ -70,7 +71,6 @@ class SpotifyAuth(BaseAPI):
         Returns:
             str: Client Secret
         """
-        log.info("--- RUNNING REAL DATA_SOURCE ---")
         return str(os.environ["SPOTIFY_CLIENT_SECRET"])
 
     async def _headers(self) -> dict[str, str]:
@@ -211,7 +211,7 @@ class SpotifyWrapper(BaseAPI):
         self.auth = SpotifyAuth(client_id=self.client_id)
 
         # Internal state (caching)
-        self._current_user: schemas.SpotifyUser | None = None
+        self._current_user: spotify_schemas.SpotifyUser | None = None
         self._user_lock = asyncio.Lock()
         super().__init__(base_url)
 
@@ -227,7 +227,7 @@ class SpotifyWrapper(BaseAPI):
             "Accept": "application/json",
         }
 
-    async def get_current_user(self) -> schemas.SpotifyUser:
+    async def get_current_user(self) -> spotify_schemas.SpotifyUser:
         """Get the current user that is authenticating.
 
         Returns:
@@ -238,12 +238,12 @@ class SpotifyWrapper(BaseAPI):
             if not self._current_user:
                 log.info("Calling API to get current user")
                 data = await self.get("me")
-                self._current_user = schemas.SpotifyUser.model_validate(data)
+                self._current_user = spotify_schemas.SpotifyUser.model_validate(data)
         return self._current_user
 
     async def create_playlist(
-        self, playlist: schemas.SpotifyCreatePlaylist
-    ) -> schemas.SpotifyPlaylist:
+        self, playlist: spotify_schemas.SpotifyCreatePlaylist
+    ) -> spotify_schemas.SpotifyPlaylist:
         """Create a playlist within Spotify.
 
         Does not create a playlist if one already exists with the same name
@@ -262,9 +262,9 @@ class SpotifyWrapper(BaseAPI):
             )
             return existing_playlist
         new_playlist = await self.post("me/playlists", json=playlist.model_dump())
-        return schemas.SpotifyPlaylist.model_validate(new_playlist)
+        return spotify_schemas.SpotifyPlaylist.model_validate(new_playlist)
 
-    async def iter_playlists(self) -> AsyncIterator[schemas.SpotifyPlaylist]:
+    async def iter_playlists(self) -> AsyncIterator[spotify_schemas.SpotifyPlaylist]:
         """Iterate through all the playlist tied to a user.
 
         Yields:
@@ -275,10 +275,12 @@ class SpotifyWrapper(BaseAPI):
         while url:
             data = await self.get(url)
             for item in data["items"]:
-                yield schemas.SpotifyPlaylist.model_validate(item)
+                yield spotify_schemas.SpotifyPlaylist.model_validate(item)
             url = data["next"]
 
-    async def find_playlist_by_name(self, name: str) -> schemas.SpotifyPlaylist | None:
+    async def find_playlist_by_name(
+        self, name: str
+    ) -> spotify_schemas.SpotifyPlaylist | None:
         """Find a playlist by name.
 
         Leverages the iterator to return once playlist is found immediately.
@@ -290,7 +292,75 @@ class SpotifyWrapper(BaseAPI):
         Returns:
             schemas.SpotifyPlaylist | None: Spotify Playlist
         """
+        log.info(f"Searching for Playlist with name: {name}")
         async for playlist in self.iter_playlists():
             if playlist.name.lower() == name.lower():
                 return playlist
         return None
+
+    async def search_track(
+        self, title: str, artist: str
+    ) -> spotify_schemas.SpotifyTrack | None:
+        """Search for a Track and return top result.
+
+        Args:
+            title (str): track title
+            artist (str): track artist
+
+        Returns:
+            spotify_schemas.SpotifyTrack | None: Pydantic Spotify Track instance.
+        """
+        log.info(f"Searching for Track: {title} - {artist}")
+        query_params: dict[str, Any] = {
+            "q": f"track:{title} artist:{artist}",
+            "type": "track",
+            "market": "US",
+            "limit": 1,
+            "offset": 0,
+        }
+        data = await self.get("search", params=query_params)
+        if not data["tracks"]["items"]:
+            log.info("Unable to find Track")
+            return None
+        return spotify_schemas.SpotifyTrack.model_validate(data["tracks"]["items"][0])
+
+    async def add_song_to_playlist(
+        self, playlist_id: str, track_uri: str | list[str]
+    ) -> list[dict[str, Any]]:
+        """Add song(s) to playlist.
+
+        Chunks requests into 100 songs at a time.
+
+        Args:
+            playlist_id (str): Playlist ID
+            track_uri (str | list[str]): Spotify Track URIs
+
+        Returns:
+            list[dict[str, Any]]: List of results from Spotify API
+        """
+        if isinstance(track_uri, str):
+            track_uri = [track_uri]
+        log.info(f"Adding {len(track_uri)} songs to playlist {playlist_id}")
+        chunked_tracks = chunk_list(track_uri, size=100)
+        results: list[dict[str, Any]] = []
+        for set_tracks in chunked_tracks:
+            result = await self.post(
+                path=f"playlists/{playlist_id}/tracks",
+                json={
+                    "uris": set_tracks,
+                },
+            )
+            results.append(result)
+        return results
+
+    async def clear_playlist_tracks(self, playlist_id: str) -> dict[str, Any]:
+        """Clear all tracks from a playlist.
+
+        Args:
+            playlist_id (str): Playlist ID
+
+        Returns:
+            dict[str, Any]: Snapshot ID for the playlist.
+        """
+        log.info(f"Clearing all tracks from playlist: {playlist_id}")
+        return await self.put(path=f"playlists/{playlist_id}/tracks", json={"uris": []})
