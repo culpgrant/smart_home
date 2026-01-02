@@ -1,0 +1,22 @@
+# TODO: Install package from pypy
+
+# Use a lightweight Python base
+FROM python:3.14-slim
+
+# Copy your repo into the container
+COPY . /opt/smart_home
+
+# Set working directory
+WORKDIR /opt/smart_home
+
+# Disable development dependencies
+ENV UV_NO_DEV=1
+
+# Install uv
+RUN pip install --upgrade pip uv
+
+# Install all dependencies from your uv.lock / pyproject.toml
+RUN uv sync --locked
+
+# Default command: bash (we override it in command)
+CMD ["/bin/sh"]

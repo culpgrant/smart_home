@@ -1,0 +1,10 @@
+grant_is_home:
+  sequence:
+  - action: tts.cloud_say
+    metadata: {}
+    data:
+      cache: true
+      entity_id: media_player.sonos_master_bedroom
+      message: Grant is home
+  alias: Grant is home
+  description: Grant is home

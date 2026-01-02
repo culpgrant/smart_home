@@ -41,3 +41,17 @@ services:
       - "784:784/tcp" # DNS over HTTPS (optional)
     environment:
       - TZ=America/Chicago
+
+  # Smart Home jobs
+  smart_home_jobs:
+    container_name: smart_home_jobs
+    build:
+      context: .
+      dockerfile: Dockerfile.smart_home_jobs
+    volumes:
+      - ./config/bash_wrappers:/logs
+      - ./:/opt/smart_home
+    environment:
+      - PYTHONPATH=/opt/smart_home/src
+    entrypoint: ["uv", "run", "/opt/smart_home/src/smart_home/jobs/q101_spotify.py"]
+    restart: "no"
