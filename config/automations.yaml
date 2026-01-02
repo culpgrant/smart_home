@@ -227,3 +227,18 @@
           message: Roomba skipped for today.
         action: notify.mobile_app_grants_iphone
   mode: single
+- id: '1767372942407'
+  alias: Grant is Home
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - input_button.grant_is_home
+  conditions: []
+  actions:
+  - action: script.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: script.grant_is_home
+  mode: single
