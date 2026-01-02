@@ -2,12 +2,70 @@
 name = "smart-home"
 version = "0.1.0"
 description = "Add your description here"
-authors = ["Grant Culp <culpgrant21@gmail.com>"]
+authors = [{name = "Grant Culp", email = "culpgrant21@gmail.com"},]
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic>=2.12.5",
+    "selectolax>=0.4.6",
+]
 
 [dependency-groups]
 dev = [
     "pre-commit>=4.3.0",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.14.9",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+managed = true
+
+[tool.ruff]
+lint.extend-select = [
+    "E",  # Error (pycodestyle errors)
+    "W",  # Warning (pycodestyle warnings)
+    "F",  # Pyflakes
+    "I",  # isort (for import sorting)
+    "B",  # Bugbear (for common bug patterns)
+    "D", # Docstrings
+    "ANN", # Type Annotations
+    "C4", # flake8-comprehensions
+    "TID", # flake8-tidy-imports
+    "ISC", # flake8-implicit-str-concat
+    "N", # Naming conventions
+    "UP", # PYupgrade
+    "PT", # pytest
+    "DOC" # Docstring
+]
+lint.extend-ignore = [
+    "D212", # Docstring multiline use the first line
+    "D205", # Blank line between summary line and detail line
+    "ANN401" # Any type
+]
+preview = true
+
+exclude = [
+    ".git",
+    "__pycache__",
+    "venv",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore docstring rules (D) and possibly long line rules (E501)
+# for everything inside the tests/ directory.
+"tests/*.py" = ["D", "E501", "ANN201"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+log_cli = true
+log_cli_level = 20

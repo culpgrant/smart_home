@@ -17,30 +17,30 @@
     - condition: device
       type: is_off
       device_id: 02d8481285f1f84f07d7267efade400f
-      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
       domain: switch
     - condition: device
       type: is_off
       device_id: 5ce9b903edc2cee333e0027bcafde879
-      entity_id: 84de7b32474964ce6255d162ecf985a6
+      entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
       domain: switch
     - condition: device
       type: is_off
       device_id: e4496a103b373de1fe42c7ecc5237e88
-      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
       domain: switch
   actions:
   - type: turn_on
     device_id: 02d8481285f1f84f07d7267efade400f
-    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
     domain: switch
   - type: turn_on
     device_id: 5ce9b903edc2cee333e0027bcafde879
-    entity_id: 84de7b32474964ce6255d162ecf985a6
+    entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
     domain: switch
   - type: turn_on
     device_id: e4496a103b373de1fe42c7ecc5237e88
-    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
     domain: switch
   mode: single
 - id: '1764967514183'
@@ -59,30 +59,30 @@
     - condition: device
       type: is_off
       device_id: 02d8481285f1f84f07d7267efade400f
-      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
       domain: switch
     - condition: device
       type: is_off
       device_id: 5ce9b903edc2cee333e0027bcafde879
-      entity_id: 84de7b32474964ce6255d162ecf985a6
+      entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
       domain: switch
     - condition: device
       type: is_off
       device_id: e4496a103b373de1fe42c7ecc5237e88
-      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
       domain: switch
   actions:
   - type: turn_on
     device_id: 02d8481285f1f84f07d7267efade400f
-    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
     domain: switch
   - type: turn_on
     device_id: 5ce9b903edc2cee333e0027bcafde879
-    entity_id: 84de7b32474964ce6255d162ecf985a6
+    entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
     domain: switch
   - type: turn_on
     device_id: e4496a103b373de1fe42c7ecc5237e88
-    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
     domain: switch
   mode: single
 - id: '1764967739218'
@@ -104,30 +104,30 @@
     - condition: device
       type: is_on
       device_id: 02d8481285f1f84f07d7267efade400f
-      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
       domain: switch
     - condition: device
       type: is_on
       device_id: 5ce9b903edc2cee333e0027bcafde879
-      entity_id: 84de7b32474964ce6255d162ecf985a6
+      entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
       domain: switch
     - condition: device
       type: is_on
       device_id: e4496a103b373de1fe42c7ecc5237e88
-      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
       domain: switch
   actions:
   - type: turn_off
     device_id: 02d8481285f1f84f07d7267efade400f
-    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
     domain: switch
   - type: turn_off
     device_id: 5ce9b903edc2cee333e0027bcafde879
-    entity_id: 84de7b32474964ce6255d162ecf985a6
+    entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
     domain: switch
   - type: turn_off
     device_id: e4496a103b373de1fe42c7ecc5237e88
-    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
     domain: switch
   mode: single
 - id: '1764967811432'
@@ -146,29 +146,84 @@
     - condition: device
       type: is_on
       device_id: 02d8481285f1f84f07d7267efade400f
-      entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+      entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
       domain: switch
     - condition: device
       type: is_on
       device_id: 5ce9b903edc2cee333e0027bcafde879
-      entity_id: 84de7b32474964ce6255d162ecf985a6
+      entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
       domain: switch
     - condition: device
       type: is_on
       device_id: e4496a103b373de1fe42c7ecc5237e88
-      entity_id: e3f06cad5bd147d7c1db6b525919f272
+      entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
       domain: switch
   actions:
   - type: turn_off
     device_id: 02d8481285f1f84f07d7267efade400f
-    entity_id: b11821a0720f45d6fd51f36bbfa5ed93
+    entity_id: 42a7ea336d9cd1ef38bc75602fc730a5
     domain: switch
   - type: turn_off
     device_id: 5ce9b903edc2cee333e0027bcafde879
-    entity_id: 84de7b32474964ce6255d162ecf985a6
+    entity_id: 76903222c11ec99fc55ed7ccb0f08b0e
     domain: switch
   - type: turn_off
     device_id: e4496a103b373de1fe42c7ecc5237e88
-    entity_id: e3f06cad5bd147d7c1db6b525919f272
+    entity_id: 29971ef2a8f6b1e3e6f947e1a8ec4899
     domain: switch
+  mode: single
+- id: '1766091303568'
+  alias: Roomba Weekday Automation - Ask
+  description: See if Roomba vacuum should run on first floor
+  triggers:
+  - trigger: time
+    at: 09:00:00
+    weekday:
+    - mon
+    - wed
+    - fri
+  conditions: []
+  actions:
+  - action: notify.mobile_app_grants_iphone
+    metadata: {}
+    data:
+      title: Run Roomba?
+      message: Do you want to start the Roomba now?
+      data:
+        tag: roomba_prompt
+        actions:
+        - action: ROOMBA_YES
+          title: 'YES'
+        - action: ROOMBA_NO
+          title: 'NO'
+  - wait_for_trigger:
+    - event_type: mobile_app_notification_action
+      event_data:
+        action: ROOMBA_YES
+      trigger: event
+    - event_type: mobile_app_notification_action
+      event_data:
+        action: ROOMBA_NO
+      trigger: event
+    timeout: 00:15:00
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: "{{ wait.trigger is not none and\n   wait.trigger.event.data.action
+          == 'ROOMBA_YES' }}\n"
+      sequence:
+      - target:
+          entity_id: vacuum.roomba_694
+        action: vacuum.start
+      - data:
+          message: Roomba started.
+        action: notify.mobile_app_grants_iphone
+    - conditions:
+      - condition: template
+        value_template: "{{ wait.trigger is not none and\n   wait.trigger.event.data.action
+          == 'ROOMBA_NO' }}\n"
+      sequence:
+      - data:
+          message: Roomba skipped for today.
+        action: notify.mobile_app_grants_iphone
   mode: single

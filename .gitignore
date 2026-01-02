@@ -9,6 +9,7 @@ tts/
 config/*.lock
 home-assistant.log*
 *.db*
+
 # Home Assistant Backups
 /config/backups/
 
@@ -24,3 +25,16 @@ __pycache__/
 
 # Matter server
 matter_server_data/
+
+# Python
+__pycache__/
+*.egg-info/
+
+# Virtual environments
+.venv/
+
+# Local Setup
+.vscode/
+
+# Adguard
+adguard/
