@@ -108,3 +108,7 @@ class Q101ToSpotify:
             playlist_id=spotify_playlist.id, track_uri=list(spotify_song_uris)
         )
         return None
+
+
+if __name__ == "__main__":
+    asyncio.run(Q101ToSpotify().run())
