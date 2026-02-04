@@ -10,6 +10,9 @@ config/*.lock
 home-assistant.log*
 *.db*
 
+# Home Assistant Custom Components (possibly might add back)
+/config/custom_components/
+
 # Home Assistant Backups
 /config/backups/
 
