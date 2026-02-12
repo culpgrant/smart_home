@@ -8,11 +8,36 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=America/Chicago
+    devices:
+      - /dev/serial/by-id/usb-Nabu_Casa_ZBT-2_1CDBD45D72F8-if00:/dev/ttyUSB0
     restart: unless-stopped
     network_mode: host
     privileged: true
 
-  # Matter server
+  # OpenThread Broad Router - Bridge between my network and the thread network
+  otbr:
+    image: ghcr.io/ownbee/hass-otbr-docker:latest
+    container_name: otbr
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    devices:
+      - /dev/serial/by-id/usb-Nabu_Casa_ZBT-2_1CDBD45D72F8-if00:/dev/adapter
+    volumes:
+      # The Bridge (The virtual network adapter)
+      - /dev/net/tun:/dev/net/tun
+      # The Memory
+      - /opt/otbr/data:/var/lib/thread
+    environment:
+      - DEVICE=/dev/adapter
+      - BAUDRATE=460800
+      - OTBR_REST_PORT=8081
+      - OTBR_WEB_PORT=8080
+      - OTBR_WEB=1
+      - FLOW_CONTROL=0
+      - BACKBONE_IF=wlo1
+
+  # Matter server - HA -> matter language
   matter-server:
     container_name: matter-server
     image: ghcr.io/home-assistant-libs/python-matter-server:stable

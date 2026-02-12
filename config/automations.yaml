@@ -242,3 +242,39 @@
     target:
       entity_id: script.grant_is_home
   mode: single
+- id: '1770689922217'
+  alias: Garage Light Logic
+  description: Turn on garage lights on activity, turn off after 10m of quiet.
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.garage_occupancy
+    to: 'on'
+    id: motion_detected
+  - trigger: state
+    entity_id: binary_sensor.garage_occupancy
+    to: 'off'
+    for:
+      minutes: 6
+    id: motion_cleared
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: motion_detected
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id:
+          - light.right_garage_door_ratgdo_light
+          - light.left_garage_door_light
+    - conditions:
+      - condition: trigger
+        id: motion_cleared
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id:
+          - light.left_garage_door_light
+          - light.right_garage_door_ratgdo_light
+  mode: restart

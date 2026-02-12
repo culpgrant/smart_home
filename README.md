@@ -31,6 +31,14 @@ To be written
 - `hass --version`
 - `exit`
 
+## Thread
+Helpful thread commands:
+    - `docker exec -it otbr ot-ctl child table`
+        - LQ IN should be a 3 and Age should be a small number (seconds since last communication)
+    - `docker logs -f matter-server` -> is the matter server (software) understanding the message
+    - `docker logs -f otbr` -> is the radio even getting the signal?
+
+
 
 ### TODO:
 - get frigate running
