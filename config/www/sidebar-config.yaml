@@ -1,0 +1,52 @@
+order:
+  - item: overview
+    order: 1
+  - new_item: true
+    item: Security
+    href: "/security"
+    icon: mdi:shield-home
+    order: 2
+  - new_item: true
+    item: Devices
+    href: "/config/devices/dashboard"
+    icon: mdi:devices
+    order: 3
+  - new_item: true
+    item: Home Maintenance
+    href: "/home-maintenance"
+    icon: mdi:wrench
+    order: 4
+  - item: energy
+    order: 5
+  - item: activity
+    order: 6
+  - item: history
+    order: 7
+  - item: todo
+    order: 8
+  - item: media-browser
+    order: 9
+  - new_item: true
+    item: Router
+    href: "http://192.168.1.1"
+    icon: mdi:router-wireless
+    target: _blank
+    order: 10
+
+  # Bottom Items
+  - item: config
+    name: Settings
+    bottom: true
+    order: 10
+  - item: notifications
+    bottom: true
+    order: 11
+  - item: profile
+    bottom: true
+    order: 12
+
+  # Hide the ones you don't want to see
+  - item: map
+    hide: true
+  - item: logbook
+    hide: true
