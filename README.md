@@ -3,6 +3,7 @@ To be written
 ### Stack
 - Computer/Server: [Beelink Mini S13]('https://www.amazon.com/dp/B0BW8JSQCH')
 - Operating System: Ubuntu
+- POE Switch: Netgear GS316EPP
 
 
 ### Setup Instructions
