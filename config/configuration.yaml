@@ -16,3 +16,35 @@ scene: !include scenes.yaml
 #   - platform: comed_hourly_pricing
 #     monitored_feeds:
 #       - type: current_hour_average
+
+# Notification Groups
+notify:
+  - name: "family_phones"
+    platform: group
+    services:
+      - service: mobile_app_grants_iphone
+      - service: mobile_app_nicoles_iphone_17
+
+
+# Alerts
+alert:
+  left_garage_door:
+    name: Left Garage Door was left open
+    done_message: Left Garage Door is closing
+    entity_id: cover.left_garage_door_door
+    state: "open"
+    repeat: 30
+    can_acknowledge: true
+    skip_first: true
+    notifiers:
+      - family_phones
+  right_garage_door:
+    name: Right Garage Door was left open
+    done_message: Right Garage Door is closing
+    entity_id: cover.right_garage_door_ratgdo_door
+    state: "open"
+    repeat: 30
+    can_acknowledge: true
+    skip_first: true
+    notifiers:
+      - family_phones
