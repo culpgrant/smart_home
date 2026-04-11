@@ -264,17 +264,121 @@
         id: motion_detected
       sequence:
       - action: light.turn_on
+        data: {}
         target:
-          entity_id:
-          - light.right_garage_door_ratgdo_light
-          - light.left_garage_door_light
+          entity_id: light.garage_lights
     - conditions:
       - condition: trigger
         id: motion_cleared
       sequence:
       - action: light.turn_off
+        data: {}
         target:
-          entity_id:
-          - light.left_garage_door_light
-          - light.right_garage_door_ratgdo_light
+          entity_id: light.garage_lights
   mode: restart
+- id: '1775406229860'
+  alias: Laundry Room - Motion-Activated Lights (Dark Only)
+  description: Turn on laundry room lights when motion is detected and it's dark
+  triggers:
+  - type: motion
+    device_id: 294450f81b489e0afff6a7d6d772fd70
+    entity_id: b01eb10e912b32645e417e3241b77d1c
+    domain: binary_sensor
+    trigger: device
+  - type: opened
+    device_id: 8db2603af9e6a10a830659ac21427a0c
+    entity_id: b7f99b873186a2a5c49e2f2c6d5daacb
+    domain: binary_sensor
+    trigger: device
+  conditions:
+  - type: is_illuminance
+    condition: device
+    device_id: 294450f81b489e0afff6a7d6d772fd70
+    entity_id: dbc6bb05c714e07d9158a36ffc1b7b65
+    domain: sensor
+    below: 40
+  actions:
+  - data:
+      brightness_pct: 100
+    action: light.turn_on
+    target:
+      device_id: e136bed98cc2df992a91d48636dce895
+  - wait_for_trigger:
+    - entity_id:
+      - binary_sensor.myggspray_wrlss_mtn_sensor_occupancy_2
+      to:
+      - 'off'
+      for:
+        minutes: 5
+      trigger: state
+  - target:
+      device_id: e136bed98cc2df992a91d48636dce895
+    action: light.turn_off
+    data: {}
+  mode: restart
+- id: '1775778748322'
+  alias: Left Button - Master Bedroom
+  description: ''
+  use_blueprint:
+    path: Skaronator/ikea-bilresa-dual-button.yaml
+    input:
+      button1_event:
+      - event.bilresa_dual_button_button_1
+      button2_event:
+      - event.bilresa_dual_button_button_2
+      button1_single:
+      - action: light.toggle
+        metadata: {}
+        target:
+          entity_id: light.kajplats_e26_cws_globe_1100lm_3
+        data: {}
+      button2_single:
+      - action: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.getting_ready_for_bed
+        data: {}
+      button2_double:
+      - action: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.sleep
+        data: {}
+      button1_double:
+      - type: toggle
+        device_id: 245a0e878143e1fd829e06355633bbc1
+        entity_id: 5da368abd760dfe705097dfda0efa08a
+        domain: switch
+- id: '1775778954988'
+  alias: Right Button - Master Bedroom
+  description: ''
+  use_blueprint:
+    path: Skaronator/ikea-bilresa-dual-button.yaml
+    input:
+      button1_event:
+      - event.bilresa_dual_button_button_1_2
+      button2_event:
+      - event.bilresa_dual_button_button_2_2
+      button1_single:
+      - action: light.toggle
+        metadata: {}
+        target:
+          entity_id: light.kajplats_e26_cws_globe_1100lm_4
+        data: {}
+      button2_single:
+      - action: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.getting_ready_for_bed
+        data: {}
+      button2_double:
+      - action: scene.turn_on
+        metadata: {}
+        target:
+          entity_id: scene.sleep
+        data: {}
+      button1_double:
+      - type: toggle
+        device_id: 245a0e878143e1fd829e06355633bbc1
+        entity_id: 5da368abd760dfe705097dfda0efa08a
+        domain: switch
