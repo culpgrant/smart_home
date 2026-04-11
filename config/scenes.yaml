@@ -1,0 +1,116 @@
+- id: '1774124115093'
+  name: Sleep
+  entities:
+    light.kajplats_e26_cws_globe_1100lm_4:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      supported_color_modes:
+      - color_temp
+      - hs
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      friendly_name: Right Lamp
+      supported_features: 32
+      state: 'off'
+    switch.grillplats_plug:
+      device_class: outlet
+      friendly_name: Master Bedroom TV
+      state: 'off'
+    light.kajplats_e26_cws_globe_1100lm_3:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      supported_color_modes:
+      - color_temp
+      - hs
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      friendly_name: Left Lamp
+      supported_features: 32
+      state: 'off'
+    switch.grillplats_plug_2:
+      device_class: outlet
+      friendly_name: Noise Machine
+      state: 'on'
+  metadata: {}
+  icon: mdi:power-sleep
+- id: '1775777873890'
+  name: Getting Ready for Bed
+  entities:
+    light.kajplats_e26_cws_globe_1100lm_4:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      supported_color_modes:
+      - color_temp
+      - hs
+      - xy
+      color_mode: color_temp
+      brightness: 204
+      color_temp_kelvin: 3389
+      color_temp: 295
+      hs_color:
+      - 27.291
+      - 47.241
+      rgb_color:
+      - 255
+      - 189
+      - 135
+      xy_color:
+      - 0.462
+      - 0.375
+      friendly_name: Right Lamp
+      supported_features: 32
+      state: 'on'
+    light.kajplats_e26_cws_globe_1100lm_3:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      supported_color_modes:
+      - color_temp
+      - hs
+      - xy
+      friendly_name: Left Lamp
+      supported_features: 32
+      color_mode: color_temp
+      brightness: 204
+      color_temp_kelvin: 3389
+      color_temp: 295
+      hs_color:
+      - 27.291
+      - 47.241
+      rgb_color:
+      - 255
+      - 189
+      - 135
+      xy_color:
+      - 0.462
+      - 0.375
+      state: 'on'
+    switch.grillplats_plug:
+      device_class: outlet
+      friendly_name: Master Bedroom TV
+      state: 'on'
+    switch.grillplats_plug_2:
+      device_class: outlet
+      friendly_name: Noise Machine
+      state: 'on'
+  metadata: {}
+  icon: mdi:bed-king

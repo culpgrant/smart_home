@@ -1,5 +1,7 @@
 order:
-  - item: overview
+  - item: Home
+    href: "/overview-grant/home"
+    icon: mdi:home
     order: 1
   - new_item: true
     item: Security
@@ -22,12 +24,10 @@ order:
     order: 6
   - item: history
     order: 7
-  - item: todo
-    order: 8
   - item: media-browser
-    order: 9
+    order: 8
   - item: home-network
-    order: 10
+    order: 9
 
   # Bottom Items
   - item: config
@@ -45,4 +45,6 @@ order:
   - item: map
     hide: true
   - item: logbook
+    hide: true
+  - item: todo
     hide: true

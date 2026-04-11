@@ -52,7 +52,7 @@ services:
     # devices:
     #   - /dev/ttyUSB1:/dev/ttyUSB1
 
-  # Adguard
+    # Adguard
   adguardhome:
     image: adguard/adguardhome:latest
     container_name: adguardhome
@@ -63,7 +63,7 @@ services:
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "3000:80"   # host 3000 → container 80 Web UI - http://192.168.1.20:3000 (host machine IP Address)
+      - "3000:80" # host 3000 → container 80 Web UI - http://192.168.1.20:3000 (host machine IP Address)
       - "853:853/tcp" # DNS over TLS (optional)
       - "784:784/tcp" # DNS over HTTPS (optional)
     environment:
@@ -75,6 +75,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.smart_home_jobs
+    user: "1000:1000"
     volumes:
       - ./config/bash_wrappers:/logs
       - ./:/opt/smart_home
@@ -82,5 +83,5 @@ services:
       - PYTHONPATH=/opt/smart_home/src
       - SPOTIFY_REFRESH_TOKEN
       - SPOTIFY_CLIENT_SECRET
-    entrypoint: ["uv", "run", "/opt/smart_home/src/smart_home/jobs/q101_spotify.py"]
+    entrypoint: [ "uv", "run", "/opt/smart_home/src/smart_home/jobs/q101_spotify.py" ]
     restart: "no"
