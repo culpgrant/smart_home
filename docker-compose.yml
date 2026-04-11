@@ -6,6 +6,7 @@ services:
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
+    user: "1000:1000"
     environment:
       - TZ=America/Chicago
       - PUID=1000
