@@ -84,5 +84,27 @@ services:
       - PYTHONPATH=/opt/smart_home/src
       - SPOTIFY_REFRESH_TOKEN
       - SPOTIFY_CLIENT_SECRET
+      - UV_CACHE_DIR=/tmp/uv-cache
     entrypoint: [ "uv", "run", "/opt/smart_home/src/smart_home/jobs/q101_spotify.py" ]
     restart: "no"
+
+  # Frigate (Camera Detection and Recording Brains)
+  frigate:
+    container_name: frigate
+    image: ghcr.io/blakeblackshear/frigate:stable
+    restart: unless-stopped
+    privileged: true
+    shm_size: "256mb"
+    volumes:
+      - ./frigate/config:/config
+      - /mnt/surveillance:/media/frigate
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5000:5000"
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
+    environment:
+      - FRIGATE_RTSP_PASSWORD
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128

@@ -37,7 +37,7 @@ alert:
     can_acknowledge: true
     skip_first: true
     notifiers:
-      - family_phones
+      - mobile_app_grants_iphone
   right_garage_door:
     name: Right Garage Door was left open
     done_message: Right Garage Door is closing
@@ -47,4 +47,4 @@ alert:
     can_acknowledge: true
     skip_first: true
     notifiers:
-      - family_phones
+      - mobile_app_grants_iphone
