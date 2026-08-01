@@ -3,8 +3,6 @@ services:
   homeassistant:
     container_name: homeassistant
     image: ghcr.io/home-assistant/home-assistant:2026.7.4
-    # Keep files written through the ./config bind mount owned by the host user.
-    user: "1000:1000"
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
