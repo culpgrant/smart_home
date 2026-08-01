@@ -22,7 +22,7 @@ To be written
 
 
 ### How to update Home Assitant
-- Ensure automated backup was taken
+- Ensure automated backup was taken (config/backups)
 - `docker ps`
 - `docker stop (contianer_id from above)`
 - Update `docker-compose.yml` image with the correct version

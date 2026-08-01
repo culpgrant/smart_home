@@ -9,12 +9,16 @@ tts/
 config/*.lock
 home-assistant.log*
 *.db*
+config/.cache/
 
 # Home Assistant Custom Components (possibly might add back)
 /config/custom_components/
+/config/www/*
+!/config/www/custom-sidebar-config.yaml
 
 # Home Assistant Backups
 /config/backups/
+/config/media/
 
 # Home Assistant Secrets
 ip_bans.yaml
@@ -39,6 +43,19 @@ __pycache__/
 # Local Setup
 .vscode/
 .env
+*.env
 
 # Adguard
 adguard/
+
+# Frigate
+frigate/config/frigate.db
+frigate/config/frigate.db-shm
+frigate/config/frigate.db-wal
+frigate/config/model_cache/
+frigate/config/.exports
+frigate/config/.*
+
+# MQTT
+mosquitto/.*
+mosquitto/config/passwd

@@ -5,12 +5,15 @@ FROM python:3.14-slim
 
 # Copy your repo into the container
 COPY . /opt/smart_home
+# Fix Ownership issue
+RUN chown -R 1000:1000 /opt/smart_home
 
 # Set working directory
 WORKDIR /opt/smart_home
 
-# Disable development dependencies
+# Set UV Environment variables
 ENV UV_NO_DEV=1
+ENV UV_CACHE_DIR=/tmp/uv-cache
 
 # Install uv
 RUN pip install --upgrade pip uv

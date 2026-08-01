@@ -296,7 +296,7 @@
     device_id: 294450f81b489e0afff6a7d6d772fd70
     entity_id: dbc6bb05c714e07d9158a36ffc1b7b65
     domain: sensor
-    below: 40
+    below: 60
   actions:
   - data:
       brightness_pct: 100
@@ -382,3 +382,372 @@
         device_id: 245a0e878143e1fd829e06355633bbc1
         entity_id: 5da368abd760dfe705097dfda0efa08a
         domain: switch
+- id: '1779048590987'
+  alias: Auto Arm at Night
+  description: Arms in Night mode if home, Away mode if not. Sends confirmation.
+  triggers:
+  - at: '22:00:00'
+    trigger: time
+    weekday:
+    - sun
+    - mon
+    - tue
+    - wed
+    - thu
+  - at: '23:00:00'
+    trigger: time
+    weekday:
+    - fri
+    - sat
+  conditions:
+  - condition: state
+    entity_id: alarm_control_panel.alarmo
+    state:
+    - disarmed
+  actions:
+  - choose:
+    - alias: If Grant or Nicole is Home
+      conditions:
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: person.grant
+          state: home
+        - condition: state
+          entity_id: person.nicole
+          state: home
+      sequence:
+      - target:
+          entity_id: alarm_control_panel.alarmo
+        action: alarm_control_panel.alarm_arm_night
+        data: {}
+      - wait_for_trigger:
+        - trigger: event
+          event_type: alarmo_failed_to_arm
+        - trigger: state
+          entity_id: alarm_control_panel.alarmo
+          to:
+          - armed_night
+          - arming
+        timeout:
+          seconds: 30
+        continue_on_timeout: true
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ wait.trigger is not none and wait.trigger.platform
+              == ''state'' }}
+
+              '
+          sequence:
+          - action: notify.mobile_app_grants_iphone
+            data:
+              message: Armed alarm in Sleep Mode.
+              title: "\U0001F512 Alarm Armed"
+        - conditions:
+          - condition: template
+            value_template: "{{ wait.trigger is not none and wait.trigger.platform
+              == 'event'\n   and wait.trigger.event.event_type == 'alarmo_failed_to_arm'
+              }}\n"
+          sequence:
+          - action: notify.mobile_app_grants_iphone
+            data:
+              title: ⚠️ Alarm Failed to Arm
+              message: "{% set reason = wait.trigger.event.data.reason %} {% set sensors
+                = wait.trigger.event.data.sensors | default([]) %} {% if reason ==
+                'open_sensors' %}\n  Could not arm — the following sensors are open:\n
+                \ {{ sensors | map('state_attr', 'friendly_name') | join(', ') }}.\n
+                \ Please check before bed.\n{% elif reason == 'not_allowed' %}\n  Could
+                not arm — arming is not allowed right now.\n{% else %}\n  Could not
+                arm — reason: {{ reason }}.\n{% endif %}\n"
+        - conditions:
+          - condition: template
+            value_template: '{{ wait.trigger is none }}'
+          sequence:
+          - action: notify.mobile_app_grants_iphone
+            data:
+              title: ⚠️ Alarm Failed to Arm
+              message: 'Could not arm — no response from Alarmo after 30 seconds.
+
+                '
+  mode: single
+- id: '1779048903611'
+  alias: Auto Disarm in Morning
+  description: Disarms at 6am on weekdays, 7am on weekends.
+  triggers:
+  - at: 06:00:00
+    trigger: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - at: 07:00:00
+    trigger: time
+    weekday:
+    - sat
+    - sun
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.alarmo
+      state: armed_night
+    - condition: state
+      entity_id: alarm_control_panel.alarmo
+      state: armed_away
+  - alias: If anyone is home
+    condition: numeric_state
+    entity_id: zone.home
+    above: 0
+  actions:
+  - target:
+      entity_id: alarm_control_panel.alarmo
+    action: alarm_control_panel.alarm_disarm
+    data: {}
+  - action: notify.mobile_app_grants_iphone
+    data:
+      title: "\U0001F513 Alarm Disarmed"
+      message: Good Morning — alarm disarmed.
+  mode: single
+- id: '1779048984373'
+  alias: Auto Disarm on Arrival
+  description: ''
+  triggers:
+  - entity_id:
+    - person.grant
+    to:
+    - home
+    trigger: state
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 3
+  - entity_id:
+    - person.nicole
+    to:
+    - home
+    trigger: state
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 3
+  conditions:
+  - condition: state
+    entity_id: alarm_control_panel.alarmo
+    state: armed_away
+  actions:
+  - target:
+      entity_id: alarm_control_panel.alarmo
+    action: alarm_control_panel.alarm_disarm
+  - data:
+      title: "\U0001F513 Alarm Disarmed"
+      message: Welcome home — alarm disarmed.
+    action: notify.mobile_app_grants_iphone
+- id: '1779049301093'
+  alias: Arm Away on Departure
+  description: Arms in Away mode when everyone leaves home, between 8am and 10pm.
+    Sends confirmation.
+  triggers:
+  - entity_id:
+    - zone.home
+    below: 1
+    trigger: numeric_state
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  conditions:
+  - condition: and
+    conditions:
+    - condition: time
+      after: 08:00:00
+      before: '22:00:00'
+    - condition: state
+      entity_id: alarm_control_panel.alarmo
+      state: disarmed
+  actions:
+  - target:
+      entity_id: alarm_control_panel.alarmo
+    action: alarm_control_panel.alarm_arm_away
+    data: {}
+  - wait_for_trigger:
+    - trigger: event
+      event_type: alarmo_failed_to_arm
+    - trigger: state
+      entity_id:
+      - alarm_control_panel.alarmo
+      to:
+      - armed_away
+    timeout:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+    continue_on_timeout: true
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger is not none and wait.trigger.platform ==
+          ''state'' }}
+
+          '
+      sequence:
+      - action: notify.mobile_app_grants_iphone
+        data:
+          title: "\U0001F512 Alarm Armed"
+          message: Nobody home — armed in Away mode.
+    - conditions:
+      - condition: template
+        value_template: "{{ wait.trigger is not none and wait.trigger.platform ==
+          'event'\n   and wait.trigger.event.event_type == 'alarmo_failed_to_arm'
+          }}\n"
+      sequence:
+      - action: notify.mobile_app_grants_iphone
+        data:
+          title: ⚠️ Alarm Failed to Arm
+          message: "{% set reason = wait.trigger.event.data.reason %} {% set sensors
+            = wait.trigger.event.data.sensors | default([]) %} {% if reason == 'open_sensors'
+            %}\n  Could not arm — the following sensors are open:\n  {{ sensors |
+            map('state_attr', 'friendly_name') | join(', ') }}.\n{% elif reason ==
+            'not_allowed' %}\n  Could not arm — arming is not allowed right now.\n{%
+            else %}\n  Could not arm — reason: {{ reason }}.\n{% endif %}\n"
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger is none }}'
+      sequence:
+      - action: notify.mobile_app_grants_iphone
+        data:
+          title: ⚠️ Alarm Failed to Arm
+          message: Could not arm — no response from Alarmo after 30 seconds.
+  mode: single
+- id: '1779049718671'
+  alias: Alarm Trigger - Camera Snapshot & Notify
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - alarm_control_panel.alarmo
+    to:
+    - triggered
+  conditions: []
+  actions:
+  - action: camera.snapshot
+    target:
+      entity_id: camera.doorbell
+    data:
+      filename: /config/www/alarm_doorbell.jpg
+  - action: camera.snapshot
+    target:
+      entity_id: camera.floodlight_front_driveway
+    data:
+      filename: /config/www/alarm_front.jpg
+  - action: camera.snapshot
+    target:
+      entity_id: camera.floodlight_backyard
+    data:
+      filename: /config/www/alarm_backyard.jpg
+  - action: camera.snapshot
+    target:
+      entity_id: camera.floodlight_sideyard
+    data:
+      filename: /config/www/alarm_sideyard.jpg
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 500
+  - action: notify.mobile_app_grants_iphone
+    data:
+      title: "\U0001F6A8 ALARM TRIGGERED"
+      message: '{{ state_attr(''alarm_control_panel.alarmo'', ''open_sensors'') |  replace(''binary_sensor.'',
+        '''') | replace(''_'', '' '') | title }}  was opened.
+
+        '
+      data:
+        image: /local/alarm_doorbell.jpg
+        push:
+          sound:
+            name: default
+            critical: 1
+            volume: 1
+        actions:
+        - action: URI
+          title: View Cameras
+          uri: homeassistant://navigate/security
+  mode: single
+- id: '1779732944569'
+  alias: Frigate - Security Alert Notification
+  description: Sends rich notifications for Frigate detections when alarm is armed.
+  triggers:
+  - trigger: mqtt
+    topic: frigate/events
+    payload: new
+    value_template: '{{ value_json.type }}'
+  conditions:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.alarmo
+      state: armed_away
+    - condition: state
+      entity_id: alarm_control_panel.alarmo
+      state: armed_night
+  actions:
+  - variables:
+      camera: '{{ trigger.payload_json.after.camera }}'
+      label: '{{ trigger.payload_json.after.label }}'
+      score: '{{ (trigger.payload_json.after.score * 100) | round(0) }}%'
+      event_id: '{{ trigger.payload_json.after.id }}'
+      snapshot_url: https://so4weni0mzco14bvis6vf23hcn7k9zc5.ui.nabu.casa/api/frigate/notifications/{{
+        event_id }}/snapshot.jpg
+      clip_url: https://so4weni0mzco14bvis6vf23hcn7k9zc5.ui.nabu.casa/api/frigate/notifications/{{
+        event_id }}/clip.mp4
+      dashboard_url: https://so4weni0mzco14bvis6vf23hcn7k9zc5.ui.nabu.casa/security
+  - action: notify.mobile_app_grants_iphone
+    data:
+      title: "\U0001F6A8 {{ label | title }} Detected"
+      message: '{{ label | title }} detected on {{ camera | replace(''_'', '' '')
+        | title }} ({{ score }} confidence)'
+      data:
+        image: '{{ snapshot_url }}'
+        url: '{{ dashboard_url }}'
+        actions:
+        - action: URI
+          title: View Clip
+          uri: '{{ clip_url }}'
+        - action: URI
+          title: Open Dashboard
+          uri: '{{ dashboard_url }}'
+  mode: parallel
+  max: 10
+- id: doorbell_ring_family_notification
+  alias: Doorbell - Notify Family
+  description: Send both family phones a snapshot when the doorbell rings.
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.front_door_doorbell_visitor
+      to: "on"
+  actions:
+    - delay: "00:00:01"
+    - action: camera.snapshot
+      target:
+        entity_id: camera.doorbell
+      data:
+        filename: /media/reolink_snapshot/doorbell_ring.jpg
+    - action: notify.family_phones
+      data:
+        title: "🔔 Someone is at the door"
+        message: "The front doorbell was rung."
+        data:
+          image: /media/local/reolink_snapshot/doorbell_ring.jpg
+          push:
+            interruption-level: time-sensitive
+            sound:
+              name: default
+          actions:
+            - action: URI
+              title: View camera
+              uri: homeassistant://navigate/security
+  mode: single

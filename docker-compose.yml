@@ -2,15 +2,12 @@ services:
   # Main home assistant
   homeassistant:
     container_name: homeassistant
-    image: ghcr.io/home-assistant/home-assistant:2026.2.1
+    image: ghcr.io/home-assistant/home-assistant:2026.7.4
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
-    user: "1000:1000"
     environment:
       - TZ=America/Chicago
-      - PUID=1000
-      - PGID=1000
     devices:
       - /dev/serial/by-id/usb-Nabu_Casa_ZBT-2_1CDBD45D72F8-if00:/dev/ttyUSB0
     restart: unless-stopped
@@ -84,5 +81,40 @@ services:
       - PYTHONPATH=/opt/smart_home/src
       - SPOTIFY_REFRESH_TOKEN
       - SPOTIFY_CLIENT_SECRET
+      - UV_CACHE_DIR=/tmp/uv-cache
     entrypoint: [ "uv", "run", "/opt/smart_home/src/smart_home/jobs/q101_spotify.py" ]
     restart: "no"
+
+  # Frigate (Camera Detection and Recording Brains)
+  frigate:
+    container_name: frigate
+    image: ghcr.io/blakeblackshear/frigate:stable
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    shm_size: "256mb"
+    volumes:
+      - ./frigate/config:/config
+      - /mnt/surveillance:/media/frigate
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5000:5000"
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
+    environment:
+      - FRIGATE_RTSP_PASSWORD
+      - FRIGATE_MQTT_USER
+      - FRIGATE_MQTT_PASSWORD
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log

@@ -6,7 +6,7 @@ default_config:
 frontend:
   themes: !include_dir_merge_named themes
   extra_module_url:
-    - /local/community/custom-sidebar/custom-sidebar-yaml.js
+    - /local/community/custom-sidebar/custom-sidebar-plugin.js?v=16.1.0
 
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -37,7 +37,7 @@ alert:
     can_acknowledge: true
     skip_first: true
     notifiers:
-      - family_phones
+      - mobile_app_grants_iphone
   right_garage_door:
     name: Right Garage Door was left open
     done_message: Right Garage Door is closing
@@ -47,4 +47,4 @@ alert:
     can_acknowledge: true
     skip_first: true
     notifiers:
-      - family_phones
+      - mobile_app_grants_iphone
