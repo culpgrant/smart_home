@@ -9,9 +9,11 @@ tts/
 config/*.lock
 home-assistant.log*
 *.db*
+config/.cache/
 
 # Home Assistant Custom Components (possibly might add back)
 /config/custom_components/
+/config/www/
 
 # Home Assistant Backups
 /config/backups/
@@ -51,3 +53,7 @@ frigate/config/frigate.db-wal
 frigate/config/model_cache/
 frigate/config/.exports
 frigate/config/.*
+
+# MQTT
+mosquitto/.*
+mosquitto/config/passwd

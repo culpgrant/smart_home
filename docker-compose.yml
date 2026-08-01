@@ -2,15 +2,12 @@ services:
   # Main home assistant
   homeassistant:
     container_name: homeassistant
-    image: ghcr.io/home-assistant/home-assistant:2026.2.1
+    image: ghcr.io/home-assistant/home-assistant:2026.5.1
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro
-    user: "1000:1000"
     environment:
       - TZ=America/Chicago
-      - PUID=1000
-      - PGID=1000
     devices:
       - /dev/serial/by-id/usb-Nabu_Casa_ZBT-2_1CDBD45D72F8-if00:/dev/ttyUSB0
     restart: unless-stopped
@@ -93,6 +90,7 @@ services:
     container_name: frigate
     image: ghcr.io/blakeblackshear/frigate:stable
     restart: unless-stopped
+    network_mode: host
     privileged: true
     shm_size: "256mb"
     volumes:
@@ -106,5 +104,17 @@ services:
       - "8555:8555/udp"
     environment:
       - FRIGATE_RTSP_PASSWORD
+      - FRIGATE_MQTT_USER
+      - FRIGATE_MQTT_PASSWORD
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
