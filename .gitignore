@@ -13,7 +13,8 @@ config/.cache/
 
 # Home Assistant Custom Components (possibly might add back)
 /config/custom_components/
-/config/www/
+/config/www/*
+!/config/www/custom-sidebar-config.yaml
 
 # Home Assistant Backups
 /config/backups/
