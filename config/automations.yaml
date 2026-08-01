@@ -722,3 +722,32 @@
           uri: '{{ dashboard_url }}'
   mode: parallel
   max: 10
+- id: doorbell_ring_family_notification
+  alias: Doorbell - Notify Family
+  description: Send both family phones a snapshot when the doorbell rings.
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.front_door_doorbell_visitor
+      to: "on"
+  actions:
+    - delay: "00:00:01"
+    - action: camera.snapshot
+      target:
+        entity_id: camera.doorbell
+      data:
+        filename: /media/reolink_snapshot/doorbell_ring.jpg
+    - action: notify.family_phones
+      data:
+        title: "🔔 Someone is at the door"
+        message: "The front doorbell was rung."
+        data:
+          image: /media/local/reolink_snapshot/doorbell_ring.jpg
+          push:
+            interruption-level: time-sensitive
+            sound:
+              name: default
+          actions:
+            - action: URI
+              title: View camera
+              uri: homeassistant://navigate/security
+  mode: single
