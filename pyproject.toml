@@ -19,6 +19,10 @@ dev = [
     "ruff>=0.14.9",
 ]
 
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -43,6 +47,7 @@ lint.extend-select = [
     "DOC" # Docstring
 ]
 lint.extend-ignore = [
+    "D104", # Missing Docstring in public package
     "D212", # Docstring multiline use the first line
     "D205", # Blank line between summary line and detail line
     "ANN401" # Any type

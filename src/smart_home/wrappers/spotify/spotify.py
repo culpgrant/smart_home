@@ -30,7 +30,7 @@ class SpotifyAuth(BaseAPI):
         self,
         client_id: str,
         scope: list[str] | None = None,
-        redirect_uri: str = "http://127.0.0.1:8080/callback",
+        redirect_uri: str = "http://127.0.0.1:8888/callback",
         base_url: str = "https://accounts.spotify.com",
     ) -> None:
         """
@@ -41,7 +41,7 @@ class SpotifyAuth(BaseAPI):
             scope (list[str] | None, optional): Scope of permissions given.
                 Defaults to None.
             redirect_uri (str, optional): Redirect uri has to match what is regerested
-                with Spotify. Defaults to "http://127.0.0.1:8080/callback".
+                with Spotify. Defaults to "http://127.0.0.1:8888/callback".
             base_url (str, optional): Base URL for auth calls. Defaults to "https://accounts.spotify.com".
         """
         super().__init__(base_url)
