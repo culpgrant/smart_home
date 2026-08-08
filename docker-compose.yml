@@ -77,10 +77,10 @@ services:
     volumes:
       - ./config/bash_wrappers:/logs
       - ./:/opt/smart_home
+    env_file:
+      - .env
     environment:
       - PYTHONPATH=/opt/smart_home/src
-      - SPOTIFY_REFRESH_TOKEN
-      - SPOTIFY_CLIENT_SECRET
       - UV_CACHE_DIR=/tmp/uv-cache
     entrypoint: [ "uv", "run", "/opt/smart_home/src/smart_home/jobs/q101_spotify.py" ]
     restart: "no"

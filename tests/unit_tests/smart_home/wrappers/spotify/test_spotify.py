@@ -56,7 +56,7 @@ async def test_auth_authorization_call_authorization_code(
     )
     data = {
         "grant_type": "authorization_code",
-        "redirect_uri": "http://127.0.0.1:8080/callback",
+        "redirect_uri": "http://127.0.0.1:8888/callback",
         "code": "fake_code",
     }
     headers = {
@@ -89,7 +89,7 @@ async def test_auth_authorization_call_refresh_token(
     )
     data = {
         "grant_type": "refresh_token",
-        "redirect_uri": "http://127.0.0.1:8080/callback",
+        "redirect_uri": "http://127.0.0.1:8888/callback",
         "refresh_token": "fake_code",
     }
     headers = {
@@ -198,7 +198,7 @@ def test_build_auth_url(fake_auth_wrapper: SpotifyAuth):
     result = fake_auth_wrapper._build_auth_url()  # pyright: ignore[reportPrivateUsage]
     assert (
         result
-        == "https://accounts.spotify.com/authorize?client_id=fake_client_id&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Fcallback&scope=playlist-modify-public"
+        == "https://accounts.spotify.com/authorize?client_id=fake_client_id&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A8888%2Fcallback&scope=playlist-modify-public"
     )
 
 
